@@ -1,0 +1,92 @@
+#include<bits/stdc++.h>
+using namespace std ;
+
+struct Node{
+    
+    Node* links[26] ;
+    bool flag = false ;
+    
+    bool containsKey(char ch){
+        return (links[ch - 'a'] != nullptr) ;
+    }
+    
+    void put(char ch , Node* newNode){
+        links[ch - 'a'] = newNode ;
+    }
+    
+    Node* nextNode(char ch){
+        return links[ch - 'a'] ;
+    }
+    
+    void setEnd(){
+        flag = true ;
+    }
+};
+
+
+class Trie {
+
+private: 
+   Node* root ;
+   
+public:
+
+    Trie(){
+        root = new Node() ;
+    }
+    
+    void insert(string &word){
+        Node* node = root ;
+        
+        for(auto ig : word){
+            if(!(node->containsKey(ig))){ // if char not present
+                node->put(ig , new Node()) ;
+            }
+            node = node->nextNode(ig) ; // get next node
+        }
+        
+        node->setEnd() ;
+    }
+    
+    bool search(string &word){
+        Node* node = root ;
+        for(auto ig : word){
+            if(!(node->containsKey(ig)))return false ;
+            node = node->nextNode(ig) ;
+        }
+        
+        return (node->flag) ;
+         
+    }
+    
+    bool startWith(string &prefix){
+        
+        Node* node = root ;
+        for(auto it : prefix){
+            if(!(node->containsKey(it)))return false ;
+            
+            node = node->nextNode(it) ;
+        }
+        
+        return true ;
+    }
+    
+};
+
+
+
+int main(){
+    
+    
+    Trie test ;
+    string ab = "ManasIsAGoodBoy" , bc = "Manas" ;
+    test.insert(ab) ;
+    
+    if(test.search(bc)){
+        cout <<"Manas will become rich one day...." ;
+    }
+    else{
+        cout <<"Will struggle to achieve that...." ;
+    }
+    
+}
